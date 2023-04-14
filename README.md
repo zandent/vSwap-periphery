@@ -50,3 +50,8 @@ contract MyContract {
 }
 
 ```
+
+## Verification
+```bash
+$ npx hardhat --network <networkName> run verify.js
+```
