@@ -78,11 +78,35 @@ export default {
     optimism: {
       url: `https://optimism-mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
     },
+    testnet: {
+      url: 'http://evmtestnet.confluxrpc.com',
+    },
+    espace: {
+      url: 'http://evm.confluxrpc.com',
+    },
   },
   etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: 'an api key',
+    customChains: [
+      {
+        network: "testnet",
+        chainId: 71,
+        urls: {
+          apiURL: "https://evmapi-testnet.confluxscan.net/api",
+          browserURL: "https://evmapi-testnet.confluxscan.net"
+        }
+      },
+      {
+        network: "espace",
+        chainId: 1030,
+        urls: {
+          apiURL: "https://evmapi.confluxscan.net/api",
+          browserURL: "https://evmapi.confluxscan.net"
+        }
+      }
+    ]
   },
   solidity: {
     compilers: [DEFAULT_COMPILER_SETTINGS],
