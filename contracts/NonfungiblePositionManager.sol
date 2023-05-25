@@ -207,6 +207,7 @@ contract NonfungiblePositionManager is
         )
     {
         Position storage position = _positions[params.tokenId];
+        require(position.poolId != 0, 'Invalid token ID');
 
         PoolAddress.PoolKey memory poolKey = _poolIdToPoolKey[position.poolId];
 
@@ -264,6 +265,7 @@ contract NonfungiblePositionManager is
     {
         require(params.liquidity > 0);
         Position storage position = _positions[params.tokenId];
+        require(position.poolId != 0, 'Invalid token ID');
 
         uint128 positionLiquidity = position.liquidity;
         require(positionLiquidity >= params.liquidity);
@@ -318,6 +320,7 @@ contract NonfungiblePositionManager is
         address recipient = params.recipient == address(0) ? address(this) : params.recipient;
 
         Position storage position = _positions[params.tokenId];
+        require(position.poolId != 0, 'Invalid token ID');
 
         PoolAddress.PoolKey memory poolKey = _poolIdToPoolKey[position.poolId];
 
@@ -376,6 +379,7 @@ contract NonfungiblePositionManager is
     /// @inheritdoc INonfungiblePositionManager
     function burn(uint256 tokenId) external payable override isAuthorizedForToken(tokenId) {
         Position storage position = _positions[tokenId];
+        require(position.poolId != 0, 'Invalid token ID');
         require(position.liquidity == 0 && position.tokensOwed0 == 0 && position.tokensOwed1 == 0, 'Not cleared');
         delete _positions[tokenId];
         _burn(tokenId);
@@ -394,7 +398,9 @@ contract NonfungiblePositionManager is
 
     /// @dev Overrides _approve to use the operator in the position, which is packed with the position permit nonce
     function _approve(address to, uint256 tokenId) internal override(ERC721) {
-        _positions[tokenId].operator = to;
+        Position storage position = _positions[tokenId];
+        require(position.poolId != 0, 'Invalid token ID');
+        position.operator = to;
         emit Approval(ownerOf(tokenId), to, tokenId);
     }
 }
